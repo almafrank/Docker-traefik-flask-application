@@ -10,3 +10,10 @@ services:
       - "8080:8080"                  # Dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+  flaskapp:
+    build: ./flaskapp   # mappen där Dockerfile ligger
+    container_name: flaskapp
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flaskapp.rule=Host(`flaskapp.localhost`)"
+      - "traefik.http.services.flaskapp.loadbalancer.server.port=8000"
