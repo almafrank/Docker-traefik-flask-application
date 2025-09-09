@@ -10,9 +10,21 @@ services:
       - "8080:8080"                  # Dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-  flaskapp:
+
+
+  #Flask applikation container
+  #Om man vill ha flera frontend appar som lastbalanserar måste de ha olika container namn!!
+  flaskapp1:
     build: ./flaskapp   # mappen där Dockerfile ligger
-    container_name: flaskapp
+    container_name: flaskapp1 
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flaskapp.rule=Host(`flaskapp.localhost`)"
+      - "traefik.http.services.flaskapp.loadbalancer.server.port=8000"
+
+  flaskapp2:
+    build: ./flaskapp   # mappen där Dockerfile ligger
+    container_name: flaskapp2
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.flaskapp.rule=Host(`flaskapp.localhost`)"
